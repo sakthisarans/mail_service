@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mailsender
 spec:
-  replicaset: 1
+  # replicaset: 1
   selector:
     matchLabels:
       app: mailsender
