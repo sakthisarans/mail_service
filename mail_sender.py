@@ -66,7 +66,7 @@ def send_email():
         subject=data['subject']
         content=data['body']
         mailHandler(name=name,subject=subject,email=email,body=content)
-        return "mail sent",200
+        return "OK",200
     except:
         return "Bad Request",400
     
