@@ -1,3 +1,4 @@
 flask
 secure-smtplib
 email-to
+Flask-Cors
