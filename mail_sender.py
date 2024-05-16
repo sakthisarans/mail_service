@@ -1,10 +1,13 @@
 from flask import Flask,request,json
 import smtplib,datetime
 import config
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from flask_cors import CORS, cross_origin
+
 app = Flask(__name__)
+app.logger.setLevel(logging.INFO)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 cors = CORS(app,resources={r'/sendemail':{"origins":["http://127.0.0.1:5500/",
@@ -60,6 +63,7 @@ def ping():
 @cross_origin()
 def send_email():
     try:
+        app.logger.info('incomming request remoteaddress : '+str(request.remote_addr))
         data = request.get_json()
         name=data['name']
         email=data['email']
@@ -67,7 +71,8 @@ def send_email():
         content=data['body']
         mailHandler(name=name,subject=subject,email=email,body=content)
         return "OK",200
-    except:
+    except Exception as ex:
+        app.logger.info("error : "+str(ex))
         return "Bad Request",400
     
 app.run (port=80,host="0.0.0.0")
