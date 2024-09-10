@@ -14,15 +14,20 @@ cors = CORS(app,resources={r'/sendemail':{"origins":["http://127.0.0.1:5500/",
                                              "http://www.sakthisaran.site",
                                              "https://www.sakthisaran.site",
                                              "http://sakthisaran.site",
-                                             "https://sakthisaran.site"]}})
-def mailHandler(name,email,subject,body):
+                                             "https://sakthisaran.site",
+                                                     "http://www.navaneetha.site",
+                                                     "https://www.navaneetha.site",
+                                                     "http://navaneetha.site",
+                                                     "https://navaneetha.site"
+                                                     ]}})
+def mailHandler(name,email,subject,body,to):
     smtp_server = smtplib.SMTP(config.smtp_server,config.smtp_port)
     smtp_server.starttls()
     smtp_server.login(config.sender_add, config.password)
     message = MIMEMultipart('alternative')
     message['Subject'] = "Email From Portfolio"
     message['From'] = config.sender_add
-    message['To'] = config.receiver_add
+    message['To'] = to
 
     html=f'''<!DOCTYPE html>
 <html>
@@ -59,7 +64,7 @@ def mailHandler(name,email,subject,body):
 def ping():
     return "OK",200
 
-@app.route('/sendemail', methods=['POST'])
+@app.route('/server/mailservice/sendemail', methods=['POST'])
 @cross_origin()
 def send_email():
     try:
@@ -69,7 +74,8 @@ def send_email():
         email=data['email']
         subject=data['subject']
         content=data['body']
-        mailHandler(name=name,subject=subject,email=email,body=content)
+        to = data['to']
+        mailHandler(name=name,subject=subject,email=email,body=content,to=to)
         return "OK",200
     except Exception as ex:
         app.logger.info("error : "+str(ex))
