@@ -56,7 +56,7 @@ def mailHandler(name,email,subject,body,to):
 '''
     messagetosend = MIMEText(html, 'html')
     message.attach(messagetosend)
-    smtp_server.sendmail(config.sender_add, config.receiver_add, message.as_string())
+    smtp_server.sendmail(config.sender_add, to, message.as_string())
     smtp_server.quit()
     return ""
 
